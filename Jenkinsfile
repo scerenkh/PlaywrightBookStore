@@ -1,8 +1,8 @@
 pipeline {
   agent any
 
-  environment {
-    PATH = "/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+  tools {
+    nodejs 'Node_18'
   }
 
   stages {
@@ -12,12 +12,10 @@ pipeline {
 
     stage('Install') {
       steps {
-        sh 'echo $PATH'
-        sh 'which node'
         sh 'node -v'
         sh 'npm -v'
         sh 'npm ci'
-        sh 'npx playwright install --with-deps'
+        sh 'npx playwright install'
       }
     }
 

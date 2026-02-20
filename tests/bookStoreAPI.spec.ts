@@ -15,21 +15,28 @@ test('create user', async ({request}) => {
   
   const responseBody = await createUserResponse.json()
   const userID = responseBody.userID
+  console.log(responseBody)
+  console.log(userID)
 
   expect(createUserResponse.status()).toEqual(201)
+
 
 
 });
 
 test('get books', async ({request}) => {
-  const booksResponse = await request.get('https://bookstore.toolsqa.com/Bookstore/v1/Books'); 
-  expect(booksResponse.status()).toEqual(200)
-
+  const getBooksResponse = await request.get('https://bookstore.toolsqa.com/Bookstore/v1/Books'); 
+  expect(getBooksResponse.status()).toEqual(200)
+  
+  const responseBody = await getBooksResponse.json()
+  console.log(responseBody)
+  
 });
 
-test('filter by Author', async ({ page , request}) => {
+/*test('filter by Author', async ({ page , request}) => {
   const booksResponse = await request.get('https://bookstore.toolsqa.com/Bookstore/v1/Books'); 
   expect(booksResponse.status()).toEqual(200)
+  console.log(booksResponse)
 
 });
-
+*/

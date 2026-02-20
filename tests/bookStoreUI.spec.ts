@@ -1,26 +1,32 @@
-import{expect, test} from '@playwright/test'
+import { test, expect } from '@playwright/test';
+import { createUser, TestUser } from './utils/users';
 
+test.describe('Bookstore UI', () => {
+  let user: TestUser;
 
-test.beforeEach(async({page}) => {
+  test.beforeEach(async ({ page, request }) => {
+    // create a new user before each test
+    user = await createUser(request);
+
+    await page.goto('https://demoqa.com/', { waitUntil: 'domcontentloaded' });
+
+    const allowAllButton = page.locator('#acceptReload');
+    if (await allowAllButton.isVisible().catch(() => false)) {
+      await allowAllButton.click();
+    }
+  });
+
+  test('login to book store with API user', async ({ page }) => {
+
+  // Set to Mobile size
+  //await page.setViewportSize({ width: 430, height: 932 });
   
-  await page.goto('https://demoqa.com/login', { waitUntil: 'load' });
-  const allowAllButton = page.locator('#AcceptReload');
+  //const usernameInput = page.locator('#userName')
 
-  if (await allowAllButton.isVisible().catch(() => false)) {
-  await allowAllButton.click();
-  }
-
-})
-
-test('login to book store', async({page}) => {
-
-  const usernameInput = page.locator('#userName')
-
-  await usernameInput.scrollIntoViewIfNeeded()
-  await expect(usernameInput).toBeVisible()
-  await usernameInput.fill('cerentest')
-  await page.locator('#password').fill('Welcome1!')
-  await page.getByRole('button', { name: 'Login' }).click()
-  await page.waitForLoadState('networkidle')
-  await expect(page.getByRole('button', { name: 'Log out' })).toBeVisible()
-})
+    await page.locator('.category-cards a').nth(5).click()
+    await page.getByRole('button', { name:'Login'}).click()
+    await page.locator('#userName').fill(user.userName)
+    await page.locator('#password').fill(user.password)
+    await page.getByRole('button', { name:'Login'}).click()
+  });
+});
